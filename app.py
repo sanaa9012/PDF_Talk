@@ -12,8 +12,8 @@ from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
 
 load_dotenv()
-os.getenv("GEMINI_API_KEY")
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def get_pdf_text(pdf_docs): 
     text = ""
@@ -35,7 +35,7 @@ def get_text_chunks(text):
     return chunks 
 
 def get_vectorstore(text_chunks):
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=os.getenv("GEMINI_API_KEY"))
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=os.getenv("GOOGLE_API_KEY"))
     vectorstore = FAISS.from_texts(text_chunks, embedding=embeddings)
     vectorstore.save_local("vectorstore")
     return vectorstore 
@@ -80,7 +80,7 @@ def main():
     for message in reversed(st.session_state.chat_history):
         user_msg, bot_msg = message
         st.write(user_template.replace("{{MSG}}", user_msg), unsafe_allow_html=True)
-        st.markdown(bot_template.replace("{{MSG}}", f"```\n{bot_msg}\n```"), unsafe_allow_html=True)
+        st.markdown(bot_template.replace("{{MSG}}", f"\n{bot_msg}\n"), unsafe_allow_html=True)
     
     with st.sidebar:
         st.subheader("Your documents")
